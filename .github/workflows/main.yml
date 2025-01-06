@@ -1,0 +1,38 @@
+name: Build mkbootimg for Windows
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            make
+
+      - name: Build mkbootimg
+        run: |
+          msys2do make
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: mkbootimg-windows-artifacts
+          path: |
+            mkbootimg
+            unpackbootimg
