@@ -7,7 +7,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build:
@@ -25,9 +24,12 @@ jobs:
             mingw-w64-x86_64-gcc
             make
 
+      - name: Add MSYS2 to Path
+        run: echo "::add-path::C:\\msys64\\mingw64\\bin"
+
       - name: Build mkbootimg
         run: |
-          msys2do make
+          C:\msys64\usr\bin\bash.exe --login -c "make"
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v3
